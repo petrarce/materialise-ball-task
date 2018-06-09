@@ -4,7 +4,7 @@
 #include "types.h"
 
 class Ball{
-private:
+public:
 	Coord_t curPos;
 	Coord_t curDir;
 	double speed;
@@ -25,7 +25,7 @@ public:
 	void SetDirection(Coord_t);
 	void SetSpeed(double);
 	void SetPosition(Coord_t);
-	void GetPosition(Coord_t & box, double length);
+	Coord_t GetPosition(Coord_t & box, double length);
 };
 
 #endif //BALL_H
