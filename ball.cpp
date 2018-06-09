@@ -5,6 +5,8 @@
 
 using namespace std;
 
+
+
 struct CurPointLength{
 	Coord_t pt;
 	Coord_t dir;
@@ -31,14 +33,17 @@ Ball::Ball(Coord_t startPos, Coord_t startDir)
 Coord_t Ball::GetPosition(Coord_t & box, double length)
 {
 	Shot(box);
+	dbg_print("curPos:%f, %f", curPos.x, curPos.y);
 	while(!CheckLength(length)){
 		ChangeDir(box);
+		dbg_print("curDir:%f, %f", curDir.x, curDir.y);
 		Shot(box);
-		//cout << "\n";
+		dbg_print("curPos:%f, %f", curPos.x, curPos.y);
+		dbg_print("nextIteration***");
 	}
 
-	//cout << "curLength, givenLength:" << currLength << "," << length << "\n";
 	FixEndpoint(length);
+	dbg_print("Fixed length:%f, %f", curPos.x, curPos.y);
 
 	return curPos;
 }
@@ -165,6 +170,11 @@ Coord_t Ball::CrossPoint(Coord_t & p1, Coord_t & p2, Coord_t & vp1, Coord_t & vp
 				vp2.x*vp1.y
 			);
 
+	/*result of calculation can have a deviation,
+		in this case if calculated point is the same, as current position, 
+		it will not be identified, and program will run in infinit cycle
+		TODO: make more liable solution  
+	*/
 	res.x = custom_round(res.x, 100);
 	res.y = custom_round(res.y, 100);
 

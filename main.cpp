@@ -11,7 +11,7 @@ Coord_t startPos;
 Coord_t startDir;
 vector<int> timeLine;
 
-//ourput data
+//output data
 Coord_t lastPont;
 
 
