@@ -30,17 +30,18 @@ Ball::Ball(Coord_t startPos, Coord_t startDir)
 
 Coord_t Ball::GetPosition(Coord_t & box, double length)
 {
-
-	while(!CheckLength()){
-
-		Shot(box);
+	Shot(box);
+	while(!CheckLength(length)){
 		ChangeDir(box);
+		Shot(box);
+		cout << "\n";
 	}
 
-	FixEndpoint();
+	cout << "curLength, givenLength:" << currLength << "," << length << "\n";
+	FixEndpoint(length);
 }
 
-bool Ball::CheckLength()
+bool Ball::CheckLength(double targLength)
 {
 
 	if (currLength < targLength)
@@ -87,11 +88,15 @@ void Ball::Shot(Coord_t & box)
 	//Determine which vectors are semidirectional
 	for (int i = 0; i < 4; i++){
 
-		if(points[i].dir.x*curDir.x < 0 ||  points[i].dir.y*curDir.y < 0)
-			continue;
+		if(	points[i].dir.x*curDir.x < 0 ||  
+			points[i].dir.y*curDir.y < 0 ||
+			points[i].pt.x == curPos.x && points[i].pt.y == curPos.y)
+				continue;
 
 		curPos = points[i].pt;
 		currLength += points[i].length;
+		cout << "new Position: " << curPos.x << "," << curPos.y << "\n";
+		cout << "currLength: " << currLength << "\n";
 		return;
 	}
 
@@ -99,26 +104,43 @@ void Ball::Shot(Coord_t & box)
 
 void Ball::ChangeDir(Coord_t & box)
 {
-	if (curPos.x == box.x || curPos.x == 0)
-		curDir.y *= -1;
-	else
+	// check situation of the corner
+	// TODO: make overload of "==" for Coord_t structure
+	if (curPos.x == box.x && curPos.y == box.y ||
+		curPos.x == 0 && curPos.y == box.y ||
+		curPos.x == box.x && curPos.y == 0 ||
+		curPos.x == 0 && curPos.y == 0){
 		curDir.x *= -1;
+		curDir.y *= -1;
+
+	}else if (curPos.x == box.x || curPos.x == 0)
+		curDir.x *= -1;
+	else
+		curDir.y *= -1;
+
+	cout << "new Direction: " << curDir.x << "," << curDir.y << "\n";
+
 }
 
-void Ball::FixEndpoint()
+void Ball::FixEndpoint(double targLength)
 {
 
 	double deltaLength = currLength - targLength;
-	curPos.x -= curDir.x*deltaLength;
-	curPos.y -= curDir.y*deltaLength;
+	curPos.x = curPos.x - curDir.x*deltaLength;
+	curPos.y = curPos.y - curDir.y*deltaLength;
+
+	cout << "Fixing endpoint: " << curPos.x << "," << curPos.y << "\n";
+
 }
 
 Coord_t Ball::CrossPoint(Coord_t & p1, Coord_t & p2, Coord_t & vp1, Coord_t & vp2)
 {
-
-	//TODO: check if lines are colinear
-	//TODO: check if points (with respect to direction vectors) are belong to one line
 	Coord_t res;
+
+	//TODO: case: vectors are kolinear
+	//TODO: 	case: points belongs to the same line 
+	//TODO:		case: points belongs to paralel lines
+	//TODO: case: points are the same
 
 	res.y = -1*
 			(
@@ -138,6 +160,9 @@ Coord_t Ball::CrossPoint(Coord_t & p1, Coord_t & p2, Coord_t & vp1, Coord_t & vp
 				vp1.x*vp2.y -
 				vp2.x*vp1.y
 			);
+
+	res.x = custom_round(res.x, 100);
+	res.y = custom_round(res.y, 100);
 
 	return res;
 }

@@ -10,13 +10,12 @@ public:
 	double speed;
 
 	double currLength;
-	double targLength;
 //private:
 public: //uncomment previous and delete this. Just for debugging purpose
 	void Shot(Coord_t & box);
 	void ChangeDir(Coord_t & box);
-	bool CheckLength();
-	void FixEndpoint();
+	bool CheckLength(double targLength);
+	void FixEndpoint(double targLength);
 	Coord_t CrossPoint(Coord_t & p1, Coord_t & p2, Coord_t & vp1, Coord_t & vp2);
 
 public:
