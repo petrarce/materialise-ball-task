@@ -34,11 +34,13 @@ Coord_t Ball::GetPosition(Coord_t & box, double length)
 	while(!CheckLength(length)){
 		ChangeDir(box);
 		Shot(box);
-		cout << "\n";
+		//cout << "\n";
 	}
 
-	cout << "curLength, givenLength:" << currLength << "," << length << "\n";
+	//cout << "curLength, givenLength:" << currLength << "," << length << "\n";
 	FixEndpoint(length);
+
+	return curPos;
 }
 
 bool Ball::CheckLength(double targLength)
@@ -95,8 +97,8 @@ void Ball::Shot(Coord_t & box)
 
 		curPos = points[i].pt;
 		currLength += points[i].length;
-		cout << "new Position: " << curPos.x << "," << curPos.y << "\n";
-		cout << "currLength: " << currLength << "\n";
+		//cout << "new Position: " << curPos.x << "," << curPos.y << "\n";
+		//cout << "currLength: " << currLength << "\n";
 		return;
 	}
 
@@ -118,7 +120,7 @@ void Ball::ChangeDir(Coord_t & box)
 	else
 		curDir.y *= -1;
 
-	cout << "new Direction: " << curDir.x << "," << curDir.y << "\n";
+	//cout << "new Direction: " << curDir.x << "," << curDir.y << "\n";
 
 }
 
@@ -129,7 +131,9 @@ void Ball::FixEndpoint(double targLength)
 	curPos.x = curPos.x - curDir.x*deltaLength;
 	curPos.y = curPos.y - curDir.y*deltaLength;
 
-	cout << "Fixing endpoint: " << curPos.x << "," << curPos.y << "\n";
+	curPos.x = round(curPos.x);
+	curPos.y = round(curPos.y);
+	//cout << "Fixing endpoint: " << curPos.x << "," << curPos.y << "\n";
 
 }
 
@@ -165,4 +169,8 @@ Coord_t Ball::CrossPoint(Coord_t & p1, Coord_t & p2, Coord_t & vp1, Coord_t & vp
 	res.y = custom_round(res.y, 100);
 
 	return res;
+}
+
+double Ball::GetSpeed(){
+	return speed;
 }
