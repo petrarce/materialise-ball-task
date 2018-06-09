@@ -66,7 +66,7 @@ int main(int argc, char** argv)
 
 
 
-	for (int i = 0; i < timeLine.size(); i++){
+	for (int i = 0; i < timeLine.size()-1; i++){
 		ball = Ball(startPos, startDir);
 		lastPont = ball.GetPosition(barierSize, timeLine[i]*ball.GetSpeed());
 		cout << lastPont.x << "," << lastPont.y << "\n";
